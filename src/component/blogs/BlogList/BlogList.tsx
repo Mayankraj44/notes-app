@@ -4,14 +4,23 @@ import { Link } from "react-router-dom";
 import { RawNote, SimpleNote, Tag } from "../../../App";
 import ReactSelect from "react-select";
 import NoteCard from "../NoteCard";
+import TagModal from "../TagModal";
 type NoteListData = {
   availableTags: Tag[];
   notes: SimpleNote[];
+  onUpdateTag: (id: string, label: string) => void;
+  onDeleteTag: (id: string) => void;
 };
 
-export const BlogList = ({ availableTags, notes }: NoteListData) => {
+export const BlogList = ({
+  availableTags,
+  notes,
+  onUpdateTag,
+  onDeleteTag,
+}: NoteListData) => {
   const [title, setTitle] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [showTagModal, setShowTagModal] = useState<boolean>(false);
 
   const filteredNotes = useMemo(() => {
     return notes.filter((note) => {
@@ -25,6 +34,10 @@ export const BlogList = ({ availableTags, notes }: NoteListData) => {
     });
   }, [notes, title, selectedTags]);
 
+  function handleTagModal() {
+    setShowTagModal((prev) => !prev);
+  }
+
   return (
     <>
       <Row className="align-items-center">
@@ -36,7 +49,9 @@ export const BlogList = ({ availableTags, notes }: NoteListData) => {
             <Link to="/new">
               <Button>Create</Button>
             </Link>
-            <Button variant="outline-secondary">Edit Tags</Button>
+            <Button onClick={handleTagModal} variant="outline-secondary">
+              Edit Tags
+            </Button>
           </Stack>
         </Col>
       </Row>
@@ -84,6 +99,13 @@ export const BlogList = ({ availableTags, notes }: NoteListData) => {
           </Col>
         ))}
       </Row>
+      <TagModal
+        show={showTagModal}
+        onClose={handleTagModal}
+        availableTags={availableTags}
+        onUpdateTag={onUpdateTag}
+        onDeleteTag={onDeleteTag}
+      />
     </>
   );
 };
