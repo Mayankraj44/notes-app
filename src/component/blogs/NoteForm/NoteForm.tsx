@@ -80,7 +80,7 @@ export const NoteForm = ({
         <Row>
           <Col>
             <Form.Group controlId="body">
-              <Form.Label>Body</Form.Label>
+              <Form.Label>MarkDown</Form.Label>
               <Form.Control
                 ref={bodyRef}
                 defaultValue={body}
