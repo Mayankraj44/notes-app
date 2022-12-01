@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
 import BlogList from "./component/blogs/BlogList";
 import Blog from "./component/blogs/Blog";
+import NoteLayout from "./component/blogs/NoteLayout";
 
 export type Note = {
   id: string;
@@ -17,7 +18,7 @@ export type Note = {
 export type SimpleNote = {
   id: string;
   tags: Tag[];
-} & RawNote;
+} & RawNoteData;
 
 export type RawNote = {
   id: string;
@@ -61,6 +62,20 @@ function App() {
     });
   }
 
+  function onNoteUpdate(id: string, data: NoteData) {
+    console.log("new Data", data);
+    setNotes((prev) => {
+      const temp = prev.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: data.tags.map((tag) => tag.id) };
+        }
+        return note;
+      });
+      console.log("temp", temp);
+      return temp;
+    });
+  }
+
   function onTagAdd(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
@@ -82,9 +97,18 @@ function App() {
             />
           }
         />
-        <Route path="/:id">
+        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
           <Route index element={<Blog />} />
-          <Route path="edit" element={<EditBlog />} />
+          <Route
+            path="edit"
+            element={
+              <EditBlog
+                onSubmit={onNoteUpdate}
+                availableTags={tags}
+                onTagAdd={onTagAdd}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

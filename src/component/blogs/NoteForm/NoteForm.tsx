@@ -2,23 +2,33 @@ import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import CreateableReactSelect from "react-select/creatable";
 import { FormEvent, useRef, useState } from "react";
-import { Note, NoteData, Tag } from "../../../App";
+import {
+  Note,
+  NoteData,
+  RawNote,
+  RawNoteData,
+  SimpleNote,
+  Tag,
+} from "../../../App";
 import { v4 as uuidV4 } from "uuid";
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
   onTagAdd: (tag: Tag) => void;
   availableTags: Tag[];
-};
+} & Partial<SimpleNote>;
 
 export const NoteForm = ({
   onSubmit,
   onTagAdd,
   availableTags,
+  title = "",
+  body = "",
+  tags = [],
 }: NoteFormProps) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedTag, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedTag, setSelectedTags] = useState<Tag[]>(tags);
   const navigate = useNavigate();
 
   const handleSubmit = (e: FormEvent) => {
@@ -37,7 +47,7 @@ export const NoteForm = ({
           <Col>
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
-              <Form.Control ref={titleRef} required />
+              <Form.Control ref={titleRef} defaultValue={title} required />
             </Form.Group>
           </Col>
           <Col>
@@ -71,7 +81,13 @@ export const NoteForm = ({
           <Col>
             <Form.Group controlId="body">
               <Form.Label>Body</Form.Label>
-              <Form.Control ref={bodyRef} required as="textarea" rows={15} />
+              <Form.Control
+                ref={bodyRef}
+                defaultValue={body}
+                required
+                as="textarea"
+                rows={15}
+              />
             </Form.Group>
           </Col>
         </Row>

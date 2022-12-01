@@ -14,7 +14,9 @@ export const CreateBlog = ({
 }: NoteFormProps) => {
   return (
     <>
-      <div className="mb-4">CreateBlog</div>
+      <div className="mb-4 text-center">
+        <h1>Create Note</h1>
+      </div>
       <NoteForm
         onSubmit={onSubmit}
         onTagAdd={onTagAdd}
