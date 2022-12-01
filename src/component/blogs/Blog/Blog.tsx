@@ -4,7 +4,11 @@ import { Link, useOutlet, useOutletContext } from "react-router-dom";
 import { Note, SimpleNote } from "../../../App";
 import ReactMarkdown from "react-markdown";
 
-export default function Blog() {
+type BlogProps = {
+  onDelete: (id: string) => void;
+};
+
+export default function Blog({ onDelete }: BlogProps) {
   const note = useOutletContext<Note>();
   return (
     <>
@@ -17,7 +21,9 @@ export default function Blog() {
             <Link to="edit">
               <Button>Edit</Button>
             </Link>
-            <Button variant="outline-danger">Delete</Button>
+            <Button onClick={() => onDelete(note.id)} variant="outline-danger">
+              Delete
+            </Button>
             <Link to="..">
               <Button variant="outline-secondary">Back</Button>
             </Link>

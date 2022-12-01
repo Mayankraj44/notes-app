@@ -16,7 +16,7 @@ export const EditBlog = ({
   onSubmit,
 }: EditNoteProps) => {
   const note = useNoteLayout();
-  console.log("data", note);
+
   return (
     <>
       <div className="mb-4 text-center">

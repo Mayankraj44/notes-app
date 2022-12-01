@@ -63,7 +63,6 @@ function App() {
   }
 
   function onNoteUpdate(id: string, data: NoteData) {
-    console.log("new Data", data);
     setNotes((prev) => {
       const temp = prev.map((note) => {
         if (note.id === id) {
@@ -73,6 +72,12 @@ function App() {
       });
       console.log("temp", temp);
       return temp;
+    });
+  }
+
+  function deleteNote(id: string) {
+    setNotes((prev) => {
+      return prev.filter((note) => note.id !== id);
     });
   }
 
@@ -98,7 +103,7 @@ function App() {
           }
         />
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<Blog />} />
+          <Route index element={<Blog onDelete={deleteNote} />} />
           <Route
             path="edit"
             element={
